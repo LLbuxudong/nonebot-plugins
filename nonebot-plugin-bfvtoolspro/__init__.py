@@ -14,14 +14,6 @@ from .network import request_player, request_ban
 # 加载 .env 文件
 load_dotenv()
 
-__plugin_meta__ = PluginMetadata(
-    name='BF5_grouptools',
-    description='基于 Nonebot2 的战地 5 QQ 群管理插件。',
-    usage='通过 管理群 -> 加群方式 -> 需要身份认证 中开启 需要回答问题并由管理员审核 并将机器人账号设为管理员。',
-    type='application',
-    supported_adapters={'~onebot.v11'},
-)
-
 # 从 .env 文件中获取允许的群号
 ALLOWED_GROUPS = set(map(int, os.getenv('ALLOWED_GROUPS', '').split(',')))
 
