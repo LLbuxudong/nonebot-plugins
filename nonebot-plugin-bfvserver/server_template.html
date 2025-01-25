@@ -1,0 +1,86 @@
+<!-- server_template.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>服务器信息</title>
+    <style>
+        html, body {
+            font-family: Arial, sans-serif;
+            margin: 0; /* 去掉默认的margin */
+            padding: 0; /* 去掉默认的padding */
+            width: 1500px; /* 设置宽度为100% */
+            min-height: 800px; /* 设置最小高度为100% */
+            background-image: url('{{ background_image }}'); /* 使用Base64编码的背景图片 */
+            background-size: auto; /* 修改: 设置背景图片宽度和高度 */
+            background-position: center; /* 将背景图片居中 */
+            background-repeat: no-repeat; /* 防止背景图片重复 */
+        }
+        body {
+            padding: 20px; /* 保留内容的内边距 */
+            height: 100%; /* 设置高度为100% */
+        }
+        h2 {
+            color: #00c3ff;
+        }
+        p {
+            margin: 5px 0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        .map-image {
+            width: 125px;
+            height: 50px;
+            object-fit: cover; /* 保持图片比例并裁剪 */
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        li {
+            margin-bottom: 10px;
+            margin-right: 20px;
+            flex: 0 0 500; 
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <h2>服务器信息</h2>
+    <p><strong>当前在线玩家：</strong> {{ player_amount }} / {{ max_player_amount }}</p>
+    <p><strong>排队玩家：</strong> {{ in_queue }}</p>
+    <p><strong>服务器名字：</strong> {{ prefix }}</p>
+    <p><strong>服务器描述：</strong> {{ description }}</p>
+    <p><strong>当前地图：</strong> {{ current_map }}</p>
+    <img src="{{ current_map_image }}" alt="当前地图" class="map-image">
+    <p><strong>所在地区：</strong> {{ country }}</p>
+    <p><strong>游戏模式：</strong> {{ mode }}</p>
+    <p><strong>游戏ID：</strong> {{ game_id }}</p>
+    <p><strong>服务器拥有者：</strong> {{ owner_name }}</p>
+
+    <h2>阵营信息</h2>
+    <ul>
+        {% for team_key, team_info in teams.items() %}
+        <li>
+            <strong>{{ team_info.name }} ({{ team_info.shortName }})</strong>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h2>地图轮换</h2>
+    <ul>
+        {% for map_info in rotation_info %}
+        <li>
+            <strong>地图：</strong> {{ map_info.mapname }}
+            <p><strong>模式：</strong> {{ map_info.mode }}</p>
+            <img src="{{ map_info.image }}" alt="地图图像" class="map-image">
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
