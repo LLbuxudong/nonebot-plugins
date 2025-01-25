@@ -1,4 +1,7 @@
 from httpx import AsyncClient
+from typing import Optional, Dict, Any
+import aiohttp
+import asyncio
 
 client = AsyncClient()
 
@@ -48,7 +51,30 @@ async def request_ban(persona_id: int):
     response = await request('https://api.bfvrobot.net/api/player/getBannedLogsByPersonaId', {'personaId': persona_id})
     return response.get('data')
 
-#获取玩家生涯信息
+#异步获取josn
+async def fetch_json(session: aiohttp.ClientSession, url: str, timeout: int = 20) -> Optional[Dict[str, Any]]:
+    try:
+        async with session.get(url, timeout=timeout) as response:
+            if response.status == 200:
+                return await response.json()
+            else:
+                return None
+    except (aiohttp.ClientError, asyncio.TimeoutError) as e:
+        return None
 
-
-
+#获取生涯信息
+async def get_namedate(session: aiohttp.ClientSession, name: str) -> Optional[Dict[str, Any]]:
+    server_url = f"https://api.gametools.network/bfv/stats/?format_values=true&name={name}&platform=pc&skip_battlelog=false&lang=zh-cn"
+    data = await fetch_json(session, server_url)
+    if data is None:
+        return None
+    
+    extracted_data = {
+        "等级":data.get("rank",None),
+        "命中率":data.get("accuracy",None),
+        "爆头率":data.get("headshots",None),
+        "游戏时长":data.get("timePlayed",None),
+        "KD":data.get("killDeath",None),
+        "KP":data.get("infantryKillsPerMinute",None),
+    }
+    return extracted_data
