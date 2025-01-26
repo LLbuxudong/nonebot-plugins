@@ -58,7 +58,7 @@ async def handle_request(bot: Bot, event: GroupRequestEvent):
             }
             extracted_data_str = "\n".join([f"{key}: {value}" for key, value in extracted_data.items()])
             await request_matcher.finish(f"查询到{user_name}的部分数据如下：\n{extracted_data_str}")
-#TODO 增加bfban和bfvrobot查询
+#TODO 增加bfban和bfvrobot查询111
 
 
 
