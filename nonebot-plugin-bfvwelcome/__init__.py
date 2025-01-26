@@ -115,7 +115,7 @@ async def handle_banstatus(bot: Bot, event: GroupMessageEvent, arg: Message = Co
    async with aiohttp.ClientSession() as session: 
        persona_id = await get_persona_id(session, arg)
        if persona_id is None:
-           await banstatus.finish("未查询到该玩家信息，请检查玩家名是否正确。")
+           await banstatus.finish("未查询到该玩家信息，请检查玩家名是否正确。\n或是API接口可能出错，请稍后再试。")
        else:
         bandata = await get_ban_data(session, persona_id) #处理联ban状态
         robotdata =  await get_community_status(session, persona_id) #处理bfvrobot状态
