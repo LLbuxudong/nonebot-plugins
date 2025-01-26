@@ -70,11 +70,11 @@ async def get_namedate(session: aiohttp.ClientSession, name: str) -> Optional[Di
         return None
     
     extracted_data = {
-        "等级":data.get("rank",None),
-        "命中率":data.get("accuracy",None),
-        "爆头率":data.get("headshots",None),
-        "游戏时长":data.get("timePlayed",None),
-        "KD":data.get("killDeath",None),
-        "KP":data.get("infantryKillsPerMinute",None),
+        "rank":data.get("rank",None),
+        "accuracy":data.get("accuracy",None),
+        "headshots":data.get("headshots",None),
+        "timePlayed":data.get("timePlayed",None),
+        "killDeath":data.get("killDeath",None),
+        "infantryKillsPerMinute":data.get("infantryKSillsPerMinute",None),
     }
     return extracted_data

@@ -67,7 +67,7 @@ async def _(event: GroupRequestEvent, bot: Bot):
     )
      await request_matcher.finish()
 
-
+"""TODO:查询联ban和robot状态"""
 @notice_matcher.handle()
 async def _(event: GroupIncreaseNoticeEvent, bot: Bot):
     session = aiohttp.ClientSession()
@@ -77,17 +77,19 @@ async def _(event: GroupIncreaseNoticeEvent, bot: Bot):
         await bot.set_group_card(group_id=event.group_id, user_id=event.user_id, card=user_name)
         userdata = await get_namedate(session, user_name)
         formatted_data = (
-        f"等级: {userdata['rank']}\n"
-        f"命中率: {userdata['accuracy']}\n"
-        f"爆头率: {userdata['headshots']}\n"
-        f"游戏时长: {userdata['timePlayed']}\n"
-        f"杀敌/死亡比: {userdata['killDeath']}\n"
-        f"每分钟击杀数: {userdata['infantryKillsPerMinute']}"
+        F"等级: {userdata['rank']}\n"
+        F"命中率: {userdata['accuracy']}\n"
+        F"爆头率: {userdata['headshots']}\n"
+        F"游戏时长: {userdata['timePlayed']}\n"
+        F"杀敌/死亡比: {userdata['killDeath']}\n"
+        F"每分钟击杀数: {userdata['infantryKillsPerMinute']}"
         )
         await notice_matcher.finish(F'收到QQ：{event.user_id}的加群申请，提供的ID为：{user_name}\n以下是查询到玩家：{user_name}的简略数据:\n{formatted_data}')
-    
+    '''
+    FIXME:无法实现更改群名片，无任何消息回复
+    '''
         
-      await notice_matcher.finish('未找到您的申请记录，请将昵称为EAid。', at_sender=True)
+    await notice_matcher.finish('未找到您的申请记录，请将昵称为EAid。', at_sender=True)
 
 
 @query_ban_matcher.handle()
