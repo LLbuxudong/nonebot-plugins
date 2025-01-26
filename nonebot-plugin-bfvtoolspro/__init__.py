@@ -1,5 +1,4 @@
 import os
-import aiohttp
 from dotenv import load_dotenv
 from nonebot import on_request, on_notice, on_startswith
 from nonebot.plugin import PluginMetadata
@@ -10,12 +9,10 @@ from nonebot.adapters.onebot.v11 import (
 
 from .data import Data
 from .utils import format_time
-from .network import request_player, request_ban,get_namedate
-
+from .network import request_player, request_ban
 
 # 加载 .env 文件
 load_dotenv()
-
 
 # 从 .env 文件中获取允许的群号
 ALLOWED_GROUPS = set(map(int, os.getenv('ALLOWED_GROUPS', '').split(',')))
@@ -43,7 +40,6 @@ async def _(event: GroupRequestEvent, bot: Bot):
      _, user_name = event.comment.split('\n')
      user_name = user_name.lstrip('答案：')
      response = await request_player(user_name)
-     #print(response)
      if response is None:
         await bot.set_group_add_request(
             flag=event.flag, sub_type=event.sub_type, approve=False,
@@ -67,29 +63,14 @@ async def _(event: GroupRequestEvent, bot: Bot):
     )
      await request_matcher.finish()
 
-"""TODO:查询联ban和robot状态"""
+
 @notice_matcher.handle()
 async def _(event: GroupIncreaseNoticeEvent, bot: Bot):
-    session = aiohttp.ClientSession()
     if event.group_id  in ALLOWED_GROUPS:
       if user_name := requests.pop(event.user_id, None):
-        print(user_name)
         await bot.set_group_card(group_id=event.group_id, user_id=event.user_id, card=user_name)
-        userdata = await get_namedate(session, user_name)
-        formatted_data = (
-        F"等级: {userdata['rank']}\n"
-        F"命中率: {userdata['accuracy']}\n"
-        F"爆头率: {userdata['headshots']}\n"
-        F"游戏时长: {userdata['timePlayed']}\n"
-        F"杀敌/死亡比: {userdata['killDeath']}\n"
-        F"每分钟击杀数: {userdata['infantryKillsPerMinute']}"
-        )
-        await notice_matcher.finish(F'收到QQ：{event.user_id}的加群申请，提供的ID为：{user_name}\n以下是查询到玩家：{user_name}的简略数据:\n{formatted_data}')
-    '''
-    FIXME:无法实现更改群名片，无任何消息回复
-    '''
-        
-    await notice_matcher.finish('未找到您的申请记录，请将昵称为EAid。', at_sender=True)
+        await notice_matcher.finish(F'收到QQ：{event.user_id}的加群申请，提供的ID为：{user_name}\n欢迎新人加入！已自动修改您的群名片为游戏名称')
+      await notice_matcher.finish('未找到您的申请记录，请将昵称为EAid。', at_sender=True)
 
 
 @query_ban_matcher.handle()
