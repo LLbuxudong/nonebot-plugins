@@ -1,4 +1,5 @@
 from httpx import AsyncClient
+from typing import Optional, Dict, Any
 
 client = AsyncClient()
 
@@ -47,8 +48,4 @@ async def request_player(name: str):
 async def request_ban(persona_id: int):
     response = await request('https://api.bfvrobot.net/api/player/getBannedLogsByPersonaId', {'personaId': persona_id})
     return response.get('data')
-
-#获取玩家生涯信息
-
-
 

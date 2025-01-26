@@ -40,7 +40,6 @@ async def _(event: GroupRequestEvent, bot: Bot):
      _, user_name = event.comment.split('\n')
      user_name = user_name.lstrip('答案：')
      response = await request_player(user_name)
-     print(response)
      if response is None:
         await bot.set_group_add_request(
             flag=event.flag, sub_type=event.sub_type, approve=False,
