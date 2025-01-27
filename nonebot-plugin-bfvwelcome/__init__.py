@@ -96,18 +96,18 @@ async def handle_request(bot: Bot, event: GroupRequestEvent):
                     persona_id = await get_persona_id(session, user_name)
                     bandata = await get_ban_data(session, persona_id) #处理联ban状态
                     robotdata =  await get_community_status(session, persona_id) #处理bfvrobot状态
-            if bandata is None:
-                banstat = "无记录"
-            else:
-                status = bandata.get("data", {}).get("status")
-                # 处理 None 和 'null'
-                if status is None or status == 'null':
-                    banstat = "无记录" 
-                else:
-                    banstat = status_descriptions.get(status, "未知状态")               
-            robotstat = robotdata.get("data",{}).get("reasonStatusName","无法获取到数据")
-            extracted_data_str = "\n".join([f"{key}: {value}" for key, value in extracted_data.items()])
-            await request_matcher.finish(f"欢迎来到本群组\n查询到{user_name}的基础数据如下：\n{extracted_data_str}\nPID:{persona_id}\nbfban状态：{banstat}\n机器人数据库状态：{robotstat}")
+                    if bandata is None:
+                        banstat = "无记录"
+                    else:
+                        status = bandata.get("data", {}).get("status")
+                        # 处理 None 和 'null'
+                        if status is None or status == 'null':
+                            banstat = "无记录" 
+                        else:
+                            banstat = status_descriptions.get(status, "未知状态")               
+                robotstat = robotdata.get("data",{}).get("reasonStatusName","无法获取到数据")
+                extracted_data_str = "\n".join([f"{key}: {value}" for key, value in extracted_data.items()])
+                await request_matcher.finish(f"欢迎来到本群组\n查询到{user_name}的基础数据如下：\n{extracted_data_str}\nPID:{persona_id}\nbfban状态：{banstat}\n机器人数据库状态：{robotstat}")
 #TODO 增加bfban和bfvrobot查询。
 
 
