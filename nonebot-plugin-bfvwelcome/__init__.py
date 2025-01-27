@@ -78,23 +78,24 @@ async def handle_request(bot: Bot, event: GroupRequestEvent):
         user_name = user_name.lstrip('答案：')  # 将玩家id获取为user_name
         async with aiohttp.ClientSession() as session:
             userdata = await get_playerdata(session, user_name)  # 查询玩家数据
+            if userdata is not None:
             # 提取数据
-            rank = userdata.get('rank', '未知')
-            accuracy = userdata.get('accuracy', '未知')
-            headshots = userdata.get('headshots', '未知')
-            killDeath = userdata.get('killDeath', '未知')
-            infantryKillsPerMinute = userdata.get('infantryKillsPerMinute', '未知')
-            extracted_data = {
+                rank = userdata.get('rank', '未知')
+                accuracy = userdata.get('accuracy', '未知')
+                headshots = userdata.get('headshots', '未知')
+                killDeath = userdata.get('killDeath', '未知')
+                infantryKillsPerMinute = userdata.get('infantryKillsPerMinute', '未知')
+                extracted_data = {
                 "等级": rank,
                 "命中率": accuracy,
                 "爆头率": headshots,
                 "KD": killDeath,
                 "KP": infantryKillsPerMinute,
-            }
-            async with aiohttp.ClientSession() as session: 
-                persona_id = await get_persona_id(session, user_name)
-                bandata = await get_ban_data(session, persona_id) #处理联ban状态
-                robotdata =  await get_community_status(session, persona_id) #处理bfvrobot状态
+                }   
+                async with aiohttp.ClientSession() as session: 
+                    persona_id = await get_persona_id(session, user_name)
+                    bandata = await get_ban_data(session, persona_id) #处理联ban状态
+                    robotdata =  await get_community_status(session, persona_id) #处理bfvrobot状态
             if bandata is None:
                 banstat = "无记录"
             else:
@@ -104,7 +105,7 @@ async def handle_request(bot: Bot, event: GroupRequestEvent):
                     banstat = "无记录" 
                 else:
                     banstat = status_descriptions.get(status, "未知状态")               
-            robotstat = robotdata.get("reasonStatusName","unknown")
+            robotstat = robotdata.get("data",{}).get("reasonStatusName","无法获取到数据")
             extracted_data_str = "\n".join([f"{key}: {value}" for key, value in extracted_data.items()])
             await request_matcher.finish(f"欢迎来到本群组\n查询到{user_name}的基础数据如下：\n{extracted_data_str}\nPID:{persona_id}\nbfban状态：{banstat}\n机器人数据库状态：{robotstat}")
 #TODO 增加bfban和bfvrobot查询。
@@ -115,7 +116,7 @@ async def handle_banstatus(bot: Bot, event: GroupMessageEvent, arg: Message = Co
    async with aiohttp.ClientSession() as session: 
        persona_id = await get_persona_id(session, arg)
        if persona_id is None:
-           await banstatus.finish("未查询到该玩家信息，请检查玩家名是否正确。\n或是API接口可能出错，请稍后再试。")
+           await banstatus.finish("未查询到该玩家信息，请检查玩家名是否正确。")
        else:
         bandata = await get_ban_data(session, persona_id) #处理联ban状态
         robotdata =  await get_community_status(session, persona_id) #处理bfvrobot状态
@@ -127,7 +128,8 @@ async def handle_banstatus(bot: Bot, event: GroupMessageEvent, arg: Message = Co
                 if status is None or status == 'null':
                     banstat = "无记录" 
                 else:
-                    banstat = status_descriptions.get(status, "未知状态")               
-        robotstat = robotdata.get("reasonStatusName","unknown")
+                    banstat = status_descriptions.get(status, "未知状态")  
+        print(robotdata)                         
+        robotstat = robotdata.get("data",{}).get("reasonStatusName","无法获取到数据")
         await banstatus.finish(f"EAID:{arg}\nPID:{persona_id}\nbfban状态：{banstat}\n机器人数据库状态：{robotstat}")   
         print(bandata,robotdata)                                      
