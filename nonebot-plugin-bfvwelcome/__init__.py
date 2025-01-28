@@ -78,7 +78,7 @@ async def communitystatus(name: str) -> Optional[str]:
    async with aiohttp.ClientSession() as session: 
        userdata = await get_persona_id(session, name)
        if userdata is None:
-           await banstatus.finish("未查询到该玩家信息，请检查玩家名是否正确。")
+              return "无法获取到数据"
        else:
         persona_id = userdata.get("personaId")
         playername = userdata.get("name")
