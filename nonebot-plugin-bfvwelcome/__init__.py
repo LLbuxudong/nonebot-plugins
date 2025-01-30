@@ -92,9 +92,10 @@ async def communitystatus(name: str) -> Optional[str]:
                 if status is None or status == 'null':
                     banstat = "无记录" 
                 else:
-                    banstat = status_descriptions.get(status, "未知状态")                         
-        robotstat = robotdata.get("data",{}).get("reasonStatusName","无法获取到数据")
-        communitystatus = (f"EAID:{playername}\nPID:{persona_id}\nbfban状态：{banstat}\n机器人数据库状态：{robotstat}")   
+                    banstat = status_descriptions.get(status, "未知状态😭")
+        robotstat = robotdata.get("data",{}).get("operationStatusName","未知😰")                         
+        robotstatreasons = robotdata.get("data",{}).get("reasonStatusName","未知😡")
+        communitystatus = (f"EAID:{playername}\nPID:{persona_id}\nbfban状态：{banstat}\n机器人数据库状态：{robotstat}\n原因：{robotstatreasons}\nCiallo~(∠・ω< )⌒★")   
         return communitystatus
 
 @request_matcher.handle()
