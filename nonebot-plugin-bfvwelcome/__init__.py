@@ -22,7 +22,7 @@ ALLOWED_GROUPS = set(map(int, os.getenv('ALLOWED_GROUPS', '').split(',')))
 requests: dict = {}
 request_matcher = on_request()
 
-banstatus = on_command("banstatus",aliases={"ban状态"},priority=5, block=True)
+banstatus = on_command("player",aliases={"ban状态"},priority=5, block=True)
 
 # ban状态描述
 status_descriptions = {
@@ -95,7 +95,7 @@ async def communitystatus(name: str) -> Optional[str]:
                     banstat = status_descriptions.get(status, "未知状态😭")
         robotstat = robotdata.get("data",{}).get("operationStatusName","未知😰")                         
         robotstatreasons = robotdata.get("data",{}).get("reasonStatusName","未知😡")
-        communitystatus = (f"EAID:{playername}\nPID:{persona_id}\nbfban状态：{banstat}\n机器人数据库状态：{robotstat}\n原因：{robotstatreasons}\nCiallo~(∠・ω< )⌒★")   
+        communitystatus = (f"以下是查询到该玩家的游戏状态🤓/n:EAID:{playername}\nPID:{persona_id}\nbfban状态：{banstat}\n机器人服游戏状态：{robotstat}\n机器人服数据库状态：{robotstatreasons}\nCiallo~(∠・ω< )⌒★")   
         return communitystatus
 
 @request_matcher.handle()
