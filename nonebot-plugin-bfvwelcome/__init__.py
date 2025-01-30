@@ -95,7 +95,7 @@ async def communitystatus(name: str) -> Optional[str]:
                     banstat = status_descriptions.get(status, "未知状态😭")
         robotstat = robotdata.get("data",{}).get("operationStatusName","未知😰")                         
         robotstatreasons = robotdata.get("data",{}).get("reasonStatusName","未知😡")
-        communitystatus = (f"以下是查询到该玩家的游戏状态🤓/n:EAID:{playername}\nPID:{persona_id}\nbfban状态：{banstat}\n机器人服游戏状态：{robotstat}\n机器人服数据库状态：{robotstatreasons}\nCiallo~(∠・ω< )⌒★")   
+        communitystatus = (f"以下是查询到该玩家的游戏状态🤓\n:EAID:{playername}\nPID:{persona_id}\nbfban状态：{banstat}\n机器人服游戏状态：{robotstat}\n机器人服数据库状态：{robotstatreasons}\nCiallo~(∠・ω< )⌒★")   
         return communitystatus
 
 @request_matcher.handle()
