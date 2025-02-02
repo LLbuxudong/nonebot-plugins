@@ -86,16 +86,22 @@ async def communitystatus(name: str) -> Optional[str]:
         robotdata =  await get_community_status(session, persona_id) #处理bfvrobot状态
         if bandata is None:
                 banstat = "无记录"
+                banurl = False
         else:
                 status = bandata.get("data", {}).get("status")
                 # 处理 None 和 'null'
                 if status is None or status == 'null':
                     banstat = "无记录" 
+                    banurl = False
                 else:
                     banstat = status_descriptions.get(status, "未知状态😭")
+                    banurl = True
         robotstat = robotdata.get("data",{}).get("operationStatusName","未知😰")                         
         robotstatreasons = robotdata.get("data",{}).get("reasonStatusName","未知😡")
-        communitystatus = (f"\n以下是查询到该玩家的游戏状态🤓\nEAID:{playername}\nPID:{persona_id}\nbfban状态：{banstat}\n机器人服游戏状态：{robotstat}\n机器人服数据库状态：{robotstatreasons}\nCiallo~(∠・ω< )⌒★")   
+        if banurl ==  True:
+            communitystatus = (f"以下是查询到该玩家的游戏状态🤓\nEAID:{playername}\nPID:{persona_id}\nBFBAN状态：{banstat}\n机器人服游戏状态：{robotstat}\n机器人服数据库状态：{robotstatreasons}\n————BFBAN链接————\nhttps://bfban.com/player/{persona_id}\nCiallo~(∠・ω< )⌒★")
+        else:
+            communitystatus = (f"以下是查询到该玩家的游戏状态🤓\nEAID:{playername}\nPID:{persona_id}\nBFBAN状态：{banstat}\n机器人服游戏状态：{robotstat}\n机器人服数据库状态：{robotstatreasons}\nCiallo~(∠・ω< )⌒★")   
         return communitystatus
 
 @request_matcher.handle()
