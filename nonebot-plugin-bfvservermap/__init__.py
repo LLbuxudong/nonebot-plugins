@@ -15,24 +15,16 @@ import os
 import base64
 require("nonebot_plugin_htmlrender")
 from nonebot_plugin_htmlrender import (
-    text_to_pic,
-    md_to_pic,
-    template_to_pic,
-    get_new_page,
+
     html_to_pic
 )
 from nonebot.plugin import PluginMetadata
 
 __plugin_meta__ = PluginMetadata(
-    name="bfvserver",
+    name="bfvservermap",
     description="查询服务器信息",
     usage="服务器信息 <服务器名称>",
-
-    type="application",
-    # 发布必填，当前有效类型有：`library`（为其他插件编写提供功能），`application`（向机器人用户提供功能）。
-
-    homepage="https://github.com/LLbuxudong/nonoebot-plugin-bfvservers",
-    # 发布必填。
+    homepage="https://github.com/LLbuxudong/nonebot-plugin-bfvservermap",
 )
 
 servermessage = on_command("server", aliases={"服务器信息"}, priority=5, block=True)
