@@ -7,13 +7,14 @@ from nonebot import on_command
 from nonebot.adapters import Message
 from nonebot.adapters.onebot.v11 import Bot,MessageSegment,MessageEvent
 from nonebot.params import CommandArg
+import os
 
 """
 一个简易的查询pb记录的插件
 """
 
 BanType ={
-    '0':'','1':'','2':'','3':'自定义原因','4':'','5':'','6':'','7':'','8':'','9':'数据异常', #FIXME
+    '0':'','1':'','2':'','3':'自定义原因','4':'','5':'','6':'','7':'','8':'服务器规则限制Ban','9':'数据异常', #FIXME
     '10':'','11':'小电视屏蔽/踢人','12':'','13':''
 }
 
@@ -111,6 +112,7 @@ async def handle_playerpb(bot: Bot, event: MessageEvent, arg: Message = CommandA
             reason = value.get('reason')
             expire_time = format_iso_time(value.get('createTime'))
             text +=f'服务器：{server_name}\n封禁类型: {ban_type_desc} ({ban_type_code})\n原因: {reason},\n时间: {expire_time}\n'
+        font_path = os.path.join(os.path.dirname(__file__), "STXINWEI.TTF")#获取绝对路径
         image_stream = await create_text_image_bytes(text=text, font_path="STXINWEI.TTF", font_size=24)
         await bot.send(event,MessageSegment.image(image_stream),reply_message=event.message, at_sender=True)    
     else:
