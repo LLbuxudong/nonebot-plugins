@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BFV 玩家列表</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('{{ background_image }}');
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .col {
+            width: 48%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .team-header {
+            background-color: rgba(76, 175, 80, 0.7);
+        }
+        .loading-header {
+            background-color: rgba(33, 150, 243, 0.7);
+        }
+        .spectators-header {
+            background-color: rgba(244, 67, 54, 0.7);
+        }
+        .header-info {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            text-align: right;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-info">
+        <p><strong>总耗时:</strong> {{ elapsed_time }}</p>
+        <p><strong>Bot 昵称:</strong> {{ bot_nickname }}</p>
+        <p><strong>Bot ID:</strong> {{ bot_id }}</p>
+        <p><strong>来自群号:</strong> {{ group_id }}</p>
+    </div>
+
+    <div class="container">
+        <h1>BFV 玩家列表</h1>
+        <p><strong>Server Name:</strong> {{ servername }}</p>
+        <p><strong>Server ID:</strong> {{ serverid }}</p>
+        <p><strong>人数:</strong> {{ current_players }} / {{ soldier_max }}</p>
+        <p><strong>排队:</strong> {{ loading_count }}/{{queue_max}}</p>
+        <p><strong>观战:</strong> {{ spectators_count }} / {{ spectator_max }}</p>
+
+        <div class="row">
+            <div class="col">
+                <h2>Team 1</h2>
+                <table>
+                    <thead>
+                        <tr class="team-header">
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for player in team_1 %}
+                        <tr>
+                            <td>{{ player.name }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col">
+                <h2>Team 2</h2>
+                <table>
+                    <thead>
+                        <tr class="team-header">
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for player in team_2 %}
+                        <tr>
+                            <td>{{ player.name }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <h2>排队ing</h2>
+                <table>
+                    <thead>
+                        <tr class="loading-header">
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for player in loading %}
+                        <tr>
+                            <td>{{ player.name }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col">
+                <h2>观战</h2>
+                <table>
+                    <thead>
+                        <tr class="spectators-header">
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for player in spectators %}
+                        <tr>
+                            <td>{{ player.name }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
