@@ -32,7 +32,7 @@ async def fetch_json(url: str, timeout: int = 20) -> Optional[Dict[str, Any]]:
     except httpx.RequestError as e:
         return {"error": f"请求发生错误: {e}"}
     except httpx.TimeoutException as e:
-        return {"error": "请求超时"}
+        return {"error": F"请求超时: {e}"}
 
 # 获取玩家 personId
 async def getplayerid(name: str):
@@ -46,25 +46,32 @@ async def getpblist(personid: str):
     data = await fetch_json(url)
     return data
 
-async def create_text_image_bytes(text: str, font_path: str, font_size: int) -> BytesIO:
+async def create_text_image_bytes(
+        text: str, # 文本内容
+        font_path: str, # 字体文件路径
+        font_size: int, # 字体大小
+        align: str = 'center', # 对齐方式 FIXME
+        line_spacing:int=10, # 行间距
+        background_color: tuple[int, int, int,int] = (0,0,0,0), # 背景颜色 RGBA
+        font_color: tuple[int, int, int] = (255, 255, 255), # 字体颜色 RGB
+        )  -> Image.Image:
     """
     通过pIL创建文本图片并返回 BytesIO 字节流
     """
     # 估算图像大小（可动态计算）
-    img = Image.new('RGBA', (800, 100 + (len(text.split('\n')) + 1) * (font_size + 10)), (0, 0, 0))
+    img = Image.new(mode='RGBA', size=(800, 100 + (len(text.split(sep='\n')) + 1) * (font_size + line_spacing)), color=background_color)
     draw = ImageDraw.Draw(img)
-    font = ImageFont.truetype(font_path, font_size)
+    font = ImageFont.truetype(font=font_path, size=font_size)
 
-    line_spacing = 10
-    lines = text.split('\n')
+    lines = text.split(sep='\n')
     y = 100
 
-    for line in lines:
-        bbox = draw.textbbox((0, 0), line, font=font)
+    for line in lines:                                                         # 遍历每一行并绘制文本
+        bbox = draw.textbbox((0, 0), text=line, font=font, align=align)
         text_width = bbox[2] - bbox[0]
         text_height = bbox[3] - bbox[1]
         x = (img.width - text_width) / 2
-        draw.text((x, y), line, fill=(255, 255, 255), font=font)
+        draw.text(xy=(x, y), text=line, fill=font_color, font=font)
         y += text_height + line_spacing
 
     # 将图像写入 BytesIO
